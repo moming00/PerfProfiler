@@ -1,11 +1,8 @@
 VERSION=$(shell git describe --tags --dirty)
-SINKER_LDFLAGS += -X "main.version=$(VERSION)"
-SINKER_LDFLAGS += -X "main.date=$(shell date --iso-8601=s)"
-SINKER_LDFLAGS += -X "main.commit=$(shell git rev-parse HEAD)"
-SINKER_LDFLAGS += -X "main.builtBy=$(shell echo `whoami`@`hostname`)"
-DEFAULT_CFG_PATH = /etc/clickhouse_sinker.hjson
-IMG_TAGGED = hub.eoitek.net/storage/clickhouse_sinker:${VERSION}
-IMG_LATEST = hub.eoitek.net/storage/clickhouse_sinker:latest
+LDFLAGS += -X "main.version=$(VERSION)"
+LDFLAGS += -X "main.date=$(shell date --iso-8601=s)"
+LDFLAGS += -X "main.commit=$(shell git rev-parse HEAD)"
+LDFLAGS += -X "main.builtBy=$(shell echo `whoami`@`hostname`)"
 export GOPROXY=https://goproxy.cn,direct
 CONTAINER_COMMAND_CFLAGS := -O2 -g -Wall -Werror $(CFLAGS)
 CONTAINER_COMMAND_CLANG ?= clang
@@ -22,11 +19,11 @@ pre:
 .PHONY: build
 build: pre
 	go generate .
-	$(GOBUILD) -ldflags '$(SINKER_LDFLAGS)' -o . ./...
+	$(GOBUILD) -ldflags '$(LDFLAGS)' -o . ./...
 
 .PHONY: debug
 debug: pre
-	$(GOBUILD) -ldflags '$(SINKER_LDFLAGS)' -gcflags "all=-N -l" -o . ./...
+	$(GOBUILD) -ldflags '$(LDFLAGS)' -gcflags "all=-N -l" -o . ./...
 
 .PHONY: benchtest
 benchtest: pre

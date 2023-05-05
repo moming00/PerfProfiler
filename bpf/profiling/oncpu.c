@@ -29,11 +29,16 @@ int do_perf_event(struct pt_regs *ctx) {
     __u64 id = bpf_get_current_pid_tgid();
     __u32 tgid = id >> 32;
     if (tgid != monitor_pid) {
+        char msg[] = "runnertest - monitor pid mismatch tgid: , monitor_pid: !";
+        bpf_trace_printk(msg, sizeof(msg));
         return 0;
     }
 
     // create map key
     struct key_t key = {};
+    // bpf_trace_printk("runnertest - create map key %d!",0);
+    char msg[] = "runnertest - Count not found\n";
+    bpf_trace_printk(msg, sizeof(msg));
 
     // get stacks
     key.kernel_stack_id = bpf_get_stackid(ctx, &stacks, 0);
@@ -42,11 +47,14 @@ int do_perf_event(struct pt_regs *ctx) {
     __u32 *val;
     val = bpf_map_lookup_elem(&counts, &key);
     if (!val) {
+        // bpf_trace_printk("runnertest - failed to lookup counts %d!",0);
         __u32 count = 0;
         bpf_map_update_elem(&counts, &key, &count, BPF_NOEXIST);
         val = bpf_map_lookup_elem(&counts, &key);
         if (!val)
             return 0;
+    } else {
+        // bpf_trace_printk("runnertest - succeed to lookup counts %d!",0);
     }
     (*val) += 1;
     return 0;

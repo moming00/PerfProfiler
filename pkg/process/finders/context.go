@@ -95,3 +95,16 @@ func (p *ProcessContext) PortIsExpose(port int) bool {
 func (p *ProcessContext) DetectNewExposePort(port int) {
 	p.exposedPorts[port] = true
 }
+
+func NewProcessContext(finder api.ProcessDetectType, process base.DetectedProcess) *ProcessContext {
+	exporsedPorts := make(map[int]bool)
+	for _, p := range process.ExposePorts() {
+		exporsedPorts[p] = true
+	}
+	return &ProcessContext{
+		syncStatus:    NotReport,
+		detectProcess: process,
+		detectType:    finder,
+		exposedPorts:  exporsedPorts,
+	}
+}

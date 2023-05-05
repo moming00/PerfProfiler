@@ -170,6 +170,10 @@ func (p *ProcessFinder) findAndReportProcesses() {
 	}
 }
 
+func (p *ProcessFinder) FindProcesses() ([]base.DetectedProcess, error) {
+	return p.regexFindProcesses()
+}
+
 func (p *ProcessFinder) regexFindProcesses() ([]base.DetectedProcess, error) {
 	// find all process
 	processes, err := p.regexFindMatchedProcesses()
@@ -345,9 +349,9 @@ func (p *ProcessFinder) regexFindMatchedProcesses() ([]*Process, error) {
 		// build the linux process and add to the list
 		ps := NewProcessByRegex(pro, cmdline, finderConfig)
 		ps.entity.Layer = finderConfig.Layer
-		ps.entity.ServiceName, err = p.buildEntity(err, ps, finderConfig.serviceNameBuilder)
-		ps.entity.InstanceName, err = p.buildEntity(err, ps, finderConfig.instanceNameBuilder)
-		ps.entity.ProcessName, err = p.buildEntity(err, ps, finderConfig.processNameBuilder)
+		ps.entity.ServiceName, err = pro.Name()
+		ps.entity.InstanceName, err = pro.Username()
+		ps.entity.ProcessName, err = pro.Name()
 		ps.entity.Labels = finderConfig.ParsedLabels
 		if err != nil {
 			log.Warnf("failed to build the process data for pid: %d, reason: %v", pro.Pid, err)

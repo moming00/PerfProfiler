@@ -21,9 +21,9 @@ import (
 	"reflect"
 
 	"perfprofiler/pkg/process/finders/kubernetes"
+	"perfprofiler/pkg/process/finders/scanner"
 
 	"perfprofiler/pkg/process/finders/base"
-	"perfprofiler/pkg/process/finders/scanner"
 )
 
 var finders = make(map[reflect.Type]base.ProcessFinder)

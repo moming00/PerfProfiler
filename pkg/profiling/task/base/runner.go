@@ -57,6 +57,11 @@ func (r *Runner) GenerateProfilingData(profilingInfo *profiling.Info, stackID ui
 	if len(symbols) == 0 {
 		return nil
 	}
+	for _, s := range symbols {
+		if s != "[MISSING]" {
+			log.Info(s)
+		}
+	}
 	return &v3.EBPFProfilingStackMetadata{
 		StackType:    stackType,
 		StackId:      int32(stackID),
