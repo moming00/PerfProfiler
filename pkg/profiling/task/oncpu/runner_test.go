@@ -24,7 +24,7 @@ func TestLoad(t *testing.T) {
 
 	task := &base.ProfilingTask{
 		TaskID:          "clickhouse-server",
-		ProcessIDList:   []string{"494301"},
+		ProcessIDList:   []string{"366864"},
 		UpdateTime:      time.Now().Unix(),
 		StartTime:       time.Now().Unix(),
 		TargetType:      base.TargetTypeOnCPU,
@@ -46,6 +46,30 @@ func TestLoad(t *testing.T) {
 			ProcessName:       "clickhouse-server",
 		}},
 	}
+	// task := &base.ProfilingTask{
+	// 	TaskID:          "testmain",
+	// 	ProcessIDList:   []string{"18066"},
+	// 	UpdateTime:      time.Now().Unix(),
+	// 	StartTime:       time.Now().Unix(),
+	// 	TargetType:      base.TargetTypeOnCPU,
+	// 	TriggerType:     "",
+	// 	ExtensionConfig: &base.ExtensionConfig{},
+	// }
+	// assert.NoError(t, e)
+
+	// finder := &scanner.ProcessFinder{}
+	// finderConf := &scanner.Config{
+	// 	Period:   "30s",
+	// 	ScanMode: scanner.Regex,
+	// 	Agent:    nil,
+	// 	RegexFinders: []*scanner.RegexFinder{{
+	// 		MatchCommandRegex: "testmain",
+	// 		Layer:             "OS_LINUX",
+	// 		ServiceName:       "testmain",
+	// 		InstanceName:      "{{.Rover.HostIPV4 \"p3p2\"}}",
+	// 		ProcessName:       "testmain",
+	// 	}},
+	// }
 	finder.Init(context.Background(), finderConf, nil)
 	pes, e := finder.FindProcesses()
 	assert.NoError(t, e)
